@@ -42,4 +42,9 @@ public class User {
         this.createdAt = createdAt;
     }
 
+    public void update(String password, String email) {
+        this.password = password;
+        this.email = email;
+    }
+
 }
