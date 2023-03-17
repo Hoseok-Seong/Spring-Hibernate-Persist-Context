@@ -1,8 +1,12 @@
 package shop.mtcoding.hiberpc.model.user;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.Arrays;
+import java.util.List;
+
 import javax.persistence.EntityManager;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +39,7 @@ public class UserRepositoryTest extends MyDummyEntity {
         User userPS = userRepository.save(user);
 
         // then
-        Assertions.assertThat(userPS.getId()).isEqualTo(1);
+        assertThat(userPS.getId()).isEqualTo(1);
     }
 
     @Test
@@ -53,7 +57,7 @@ public class UserRepositoryTest extends MyDummyEntity {
         User updateUserPS = userRepository.save(userPS);
 
         // then
-        Assertions.assertThat(updateUserPS.getPassword()).isEqualTo("5678");
+        assertThat(updateUserPS.getPassword()).isEqualTo("5678");
     }
 
     @Test
@@ -74,7 +78,7 @@ public class UserRepositoryTest extends MyDummyEntity {
 
         // then
         User updateUserPS = userRepository.findById(1);
-        Assertions.assertThat(updateUserPS.getPassword()).isEqualTo("5678");
+        assertThat(updateUserPS.getPassword()).isEqualTo("5678");
     }
 
     @Test
@@ -92,6 +96,39 @@ public class UserRepositoryTest extends MyDummyEntity {
 
         // then
         User deleteUserPS = userRepository.findById(1);
-        Assertions.assertThat(deleteUserPS).isNull();
+        assertThat(deleteUserPS).isNull();
+    }
+
+    @Test
+    public void findById_test() {
+        // given 1 - DB에 영속화, before each로 해도 된다
+        User user = newUser("ssar");
+        userRepository.save(user);
+
+        // given 2
+        int id = 1;
+
+        // when
+        User userPS = userRepository.findById(id);
+
+        // then
+        assertThat(userPS.getUsername()).isEqualTo("ssar");
+
+    }
+
+    @Test
+    public void findAll_test() {
+        // given
+        List<User> userList = Arrays.asList(newUser("ssar"), newUser("cos"));
+        userList.stream().forEach((user) -> {
+            userRepository.save(user);
+        });
+
+        // when
+        List<User> userListPS = userRepository.findAll();
+
+        // then
+        assertThat(userListPS.size()).isEqualTo(2);
+
     }
 }

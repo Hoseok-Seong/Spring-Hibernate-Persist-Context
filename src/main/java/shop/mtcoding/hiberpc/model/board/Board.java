@@ -3,6 +3,7 @@ package shop.mtcoding.hiberpc.model.board;
 import java.sql.Timestamp;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -27,7 +28,8 @@ public class Board {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
+    // @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne() // default는 eager
     private User user; // foreign key
 
     private String title;
@@ -42,6 +44,22 @@ public class Board {
         this.title = title;
         this.content = content;
         this.createdAt = createdAt;
+    }
+
+    public void update(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
+
+    @Override
+    public String toString() {
+        return "Board{" +
+                "id=" + id +
+                ", user=" + user +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", createdAt=" + createdAt +
+                '}';
     }
 
 }
